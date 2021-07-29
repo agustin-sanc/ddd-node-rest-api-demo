@@ -1,14 +1,33 @@
+import ID from "../value-objects/id";
+import EmailAddress from "../value-objects/email-address";
+import Password from "../value-objects/password";
+import {UserTypes} from "../enums/user-types";
+
 export default class User {
+  private readonly id: ID;
+  private readonly emailAddress: EmailAddress;
+  private readonly password: Password;
+  private readonly type: string;
+
   constructor(params: {
-    emailAddress: string,
-    firstName: string,
-    lastName: string
+    id: ID,
+    emailAddress: EmailAddress,
+    password: Password,
+    type: string
   })
    {
-    const { emailAddress, firstName, lastName } = params;
+    if (!params) throw new Error('params must be defined');
+    if (!params.id) throw new Error('id must be defined');
+    if (!params.emailAddress) throw new Error('emailAddress must be defined');
+    if (!params.password) throw new Error('password must be defined');
+    if (!params.type) throw new Error('type must be defined');
 
-    if (!emailAddress) throw new Error('emailAddress must be defined');
-    if (!firstName) throw new Error('firstName must be defined');
-    if (!lastName) throw new Error('lastName must be defined');
+    if (!(params.type in UserTypes))
+      throw new Error('Invalid type');
+
+    this.id = params.id;
+    this.emailAddress = params.emailAddress;
+    this.password = params.password;
+    this.type = params.type;
   }
 }
