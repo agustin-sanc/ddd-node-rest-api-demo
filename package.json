@@ -1,0 +1,19 @@
+{
+  "name": "node-rest-api-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agustin-sanc/node-rest-api-demo.git"
+  },
+  "author": "Agustin Sanchez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/agustin-sanc/node-rest-api-demo/issues"
+  },
+  "homepage": "https://github.com/agustin-sanc/node-rest-api-demo#readme"
+}
