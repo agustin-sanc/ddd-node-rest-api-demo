@@ -20,7 +20,7 @@ export default class DeleteUserByIdEndpointController {
     const { request, response } = params;
 
     try {
-      this.validateRequestParams(request.query);
+      this.validateRequestBody(request.body);
     } catch(error) {
       console.error(error);
 
@@ -33,7 +33,7 @@ export default class DeleteUserByIdEndpointController {
 
     try {
       await this.userDeleter.deleteUser(
-        new ID(request.query.id)
+        new ID(request.body.id)
       );
     } catch(error) {
       console.error(error);
@@ -56,12 +56,12 @@ export default class DeleteUserByIdEndpointController {
     return response
       .status(200)
       .send({
-        message: `User with id ${ request.query.id } deleted successfully`,
+        message: `User with id ${ request.body.id } deleted successfully`,
       })
   }
 
-  private validateRequestParams(params: any): void {
-    if (!params.id)
-      throw new Error('id parameter must be defined');
+  private validateRequestBody(requestBody: any): void {
+    if (!requestBody.id)
+      throw new Error('id value must be defined');
   }
 }
