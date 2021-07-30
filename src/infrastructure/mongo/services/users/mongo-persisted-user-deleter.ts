@@ -13,8 +13,8 @@ export default class MongoPersistedUserDeleter
         console.error(error);
 
         throw new Error(
-          `Error deleting user with id ${ id.getValue() } from MongoDB`
+          `Error deleting user with id ${ id.getValue() } from MongoDB.`
         )
-      })
+      });
   }
 }

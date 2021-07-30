@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import User from "../../../../../domain/entities/user";
-import UserFinderById from "../../../../../application/services/user-finder-by-id";
 import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
 import ID from "../../../../../domain/value-objects/id";
+import UsersFinder from "../../../../../application/services/users-finder";
 
 export default class FindUserByIdEndpointController {
   constructor(
-    private readonly userFinderById: UserFinderById
+    private readonly usersFinder: UsersFinder
   ) {
-    if (!userFinderById)
-      throw new Error('userFinderById must be defined');
+    if (!usersFinder)
+      throw new Error('usersFinder must be defined');
   }
 
   public async execute(params: {
@@ -33,13 +33,13 @@ export default class FindUserByIdEndpointController {
     let user: User;
 
     try {
-      user = await this.userFinderById.findUserById(
+      user = await this.usersFinder.findUserById(
         new ID(request.query.id)
       );
     } catch(error) {
       console.error(error);
 
-      if (error.message.includes("doesn't exist"))
+      if (error.message.includes('Not found'))
         return response
           .status(404)
           .send({

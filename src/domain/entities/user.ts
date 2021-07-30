@@ -37,6 +37,10 @@ export default class User {
     return this.id;
   }
 
+  public hasId(id: ID): boolean {
+    return this.id.equals(id);
+  }
+
   public getEmailAddress(): EmailAddress {
     return this.emailAddress;
   }

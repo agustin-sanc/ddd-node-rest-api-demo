@@ -36,6 +36,13 @@ export default class UpdateUserEndpointController {
     } catch(error) {
       console.error(error);
 
+      if (error.message.includes('Not found'))
+        return response
+          .status(404)
+          .send({
+            error: error.message
+          })
+
       if (error.message.includes('Conflict'))
         return response
           .status(409)

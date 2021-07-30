@@ -1,7 +1,4 @@
 import { Request, Response } from "express";
-import User from "../../../../../domain/entities/user";
-import UserFinderById from "../../../../../application/services/user-finder-by-id";
-import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
 import ID from "../../../../../domain/value-objects/id";
 import UserDeleter from "../../../../../application/services/user-deleter";
 

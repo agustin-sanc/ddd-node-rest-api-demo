@@ -9,7 +9,7 @@ export default class MongoPersistedUserCreator
       _id: user.getId().getValue(),
       emailAddress: user.getEmailAddress().getValue(),
       password: user.getPassword().getValue(),
-      type: user.getType().toUpperCase(),
+      type: user.getType(),
     });
 
     await userDocument.save().catch((error) => {

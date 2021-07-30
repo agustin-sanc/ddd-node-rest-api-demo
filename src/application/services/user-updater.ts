@@ -1,31 +1,23 @@
 import PersistedUserUpdater from "../interfaces/persisted-user-updater";
-import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
 import EmailAddress from "../../domain/value-objects/email-address";
 import Password from "../../domain/value-objects/password";
-import PersistedUserFinderById from "../interfaces/persisted-user-finder-by-id";
 import ID from "../../domain/value-objects/id";
-import User from "../../domain/entities/user";
+import UsersFinder from "./users-finder";
 
 export default class UserUpdater {
   private readonly persistedUserUpdater: PersistedUserUpdater;
-  private readonly persistedUserFinderById: PersistedUserFinderById;
-  private readonly persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress;
+  private readonly usersFinder: UsersFinder;
 
   constructor(params: {
     persistedUserUpdater: PersistedUserUpdater,
-    persistedUserFinderById: PersistedUserFinderById,
-    persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress
+    usersFinder: UsersFinder
   }) {
     this.checkForUndefinedConstructorParams(params);
 
     this.persistedUserUpdater =
       params.persistedUserUpdater;
 
-    this.persistedUserFinderById =
-      params.persistedUserFinderById;
-
-    this.persistedUserFinderByEmailAddress =
-      params.persistedUserFinderByEmailAddress;
+    this.usersFinder = params.usersFinder;
   }
 
   public async updateUser(params: {
@@ -37,32 +29,23 @@ export default class UserUpdater {
 
     const {id, emailAddress, password} = params;
 
-    const user = await this.persistedUserFinderById
-      .findPersistedUserById(params.id)
-      .then((foundUser: User) => {
-        if (!foundUser) {
-          throw new Error(
-            `User with id ${id.getValue()} doesn't exist`
-          );
-        }
-
-        return foundUser;
-      })
-      .catch(error => {
-        console.error(error);
-
-        throw new Error(
-          `Error finding user with id ${id.getValue()} into persistence`
-        )
-      })
+    const user = await this.usersFinder.findUserById(id);
 
     const foundUserWithSameEmailAddress =
-      await this.persistedUserFinderByEmailAddress
-        .findPersistedUserByEmailAddress(
-          emailAddress
-        );
+      await this.usersFinder
+        .findUserByEmailAddress(emailAddress)
+        .catch(error => {
+          console.error(error);
 
-    if (foundUserWithSameEmailAddress) {
+          if(error.message.includes('Not found'))
+            return undefined;
+
+          throw error;
+        })
+
+    if (foundUserWithSameEmailAddress
+      && !(foundUserWithSameEmailAddress.hasId(id))
+    ) {
       throw new Error(
         `Conflict. Email address is already taken.`
       );
@@ -77,28 +60,20 @@ export default class UserUpdater {
         console.error(error);
 
         throw new Error(
-          `Error updating user with id ${id.getValue()} into persistence`
-        )
+          `Error updating user with id ${id.getValue()} into persistence.`
+        );
       })
   }
 
   private checkForUndefinedConstructorParams(params: {
     persistedUserUpdater: PersistedUserUpdater,
-    persistedUserFinderById: PersistedUserFinderById,
-    persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress
+    usersFinder: UsersFinder
   }): void {
     if (!params.persistedUserUpdater)
-      throw new Error('persistedUserUpdater must be defined');
+      throw new Error('persistedUserUpdater must be defined.');
 
-    if (!params.persistedUserFinderById)
-      throw new Error(
-        'persistedUserFinderByID must be defined'
-      );
-
-    if (!params.persistedUserFinderByEmailAddress)
-      throw new Error(
-        'persistedUserFinderByEmailAddress must be defined'
-      );
+    if (!params.usersFinder)
+      throw new Error('usersFinder must be defined.');
   }
 
   private checkForUndefinedUpdateUserParams(params: {
@@ -107,12 +82,12 @@ export default class UserUpdater {
     password: Password,
   }): void {
     if (!params.id)
-      throw new Error('id must be defined');
+      throw new Error('id must be defined.');
 
     if (!params.emailAddress)
-      throw new Error('emailAddress must be defined');
+      throw new Error('emailAddress must be defined.');
 
     if (!params.password)
-      throw new Error('password must be defined');
+      throw new Error('password must be defined.');
   }
 }
