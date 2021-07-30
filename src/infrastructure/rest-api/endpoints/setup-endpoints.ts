@@ -1,6 +1,6 @@
 import {Application} from "express";
 import getUserEndpointsRouter from "./users/user-endpoints-router";
-import getSessionEndpointsRouter from "./login/session-endpoints-router";
+import getSessionEndpointsRouter from "./sessions/session-endpoints-router";
 
 const userEndpointsRouter = getUserEndpointsRouter();
 const sessionEndpointsRouter = getSessionEndpointsRouter();
