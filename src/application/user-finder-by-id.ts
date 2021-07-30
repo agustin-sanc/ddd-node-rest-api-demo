@@ -20,7 +20,7 @@ export default class UserFinderById {
           throw error;
 
         throw new Error(
-          `Error finding persisted user with id = ${ id.getValue() }`
+          `Error finding persisted user with id ${ id.getValue() }`
         );
       });
   }
