@@ -1,6 +1,6 @@
-import PersistedUserCreator from "../../../application/interfaces/persisted-user-creator";
-import User from "../../../domain/entities/user";
-import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
+import PersistedUserCreator from "../../../../application/interfaces/persisted-user-creator";
+import User from "../../../../domain/entities/user";
+import { UserMongoDocumentModel } from "../../models/user-mongo-document-model";
 
 export default class MongoPersistedUserCreator
   implements PersistedUserCreator {
