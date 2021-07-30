@@ -1,5 +1,4 @@
 export enum UserTypes {
-  ADMIN = 'ADMIN',
-  BUSINESS = 'BUSINESS',
-  CUSTOMER = 'CUSTOMER'
+  ADMIN_USER = 'ADMIN_USER',
+  END_USER = 'END_USER'
 }
