@@ -6,7 +6,7 @@ import buildUserCreatorApplicationService
 import buildUsersFinderApplicationService
   from "../../../builders/users-application-services/build-users-finder-application-service";
 import FindUsersEndpointController from "./controllers/find-users-endpoint-controller";
-import findUserByIdEndpointController from "./controllers/find-user-by-id-endpoint-controller";
+import FindUserByIdEndpointController from "./controllers/find-user-by-id-endpoint-controller";
 import buildUserFinderByIdApplicationService
   from "../../../builders/users-application-services/build-user-finder-by-id-application-service";
 
@@ -53,7 +53,7 @@ router.get('/api/v1/user',
   ): Promise<Response> => {
     const userFinderById = buildUserFinderByIdApplicationService();
 
-    const controller = new findUserByIdEndpointController(
+    const controller = new FindUserByIdEndpointController(
       userFinderById
     );
 

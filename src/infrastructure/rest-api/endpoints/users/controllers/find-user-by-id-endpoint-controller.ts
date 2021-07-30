@@ -4,7 +4,7 @@ import UserFinderById from "../../../../../application/user-finder-by-id";
 import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
 import ID from "../../../../../domain/value-objects/id";
 
-export default class findUserByIdEndpointController {
+export default class FindUserByIdEndpointController {
   constructor(
     private readonly userFinderById: UserFinderById
   ) {
