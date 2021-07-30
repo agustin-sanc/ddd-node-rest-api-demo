@@ -5,8 +5,8 @@ import {UserTypes} from "../enums/user-types";
 
 export default class User {
   private readonly id: ID;
-  private readonly emailAddress: EmailAddress;
-  private readonly password: Password;
+  private emailAddress: EmailAddress;
+  private password: Password;
   private readonly type: string;
 
   constructor(params: {
@@ -47,5 +47,13 @@ export default class User {
 
   public getType(): string {
     return this.type;
+  }
+
+  public changeEmailAddressTo(emailAddress: EmailAddress): void {
+    this.emailAddress = emailAddress;
+  }
+
+  public changePasswordTo(password: Password): void {
+    this.password = password;
   }
 }
