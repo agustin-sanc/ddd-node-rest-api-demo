@@ -12,6 +12,9 @@ import buildUserFinderByIdApplicationService
 import DeleteUserByIdEndpointController from "./controllers/delete-user-by-id-endpoint-controller";
 import buildUserDeleterApplicationService
   from "../../../builders/users-application-services/build-user-deleter-application-service";
+import UpdateUserEndpointController from "./controllers/update-user-endpoint-controller";
+import buildUserUpdaterApplicationService
+  from "../../../builders/users-application-services/build-user-updater-application-service";
 
 const router = Express.Router();
 
@@ -24,6 +27,23 @@ router.post('/api/v1/user',
 
     const controller = new CreateUserEndpointController(
       userCreator
+    );
+
+    return await controller.execute({
+      request,
+      response
+    });
+  });
+
+router.patch('/api/v1/user',
+  async (
+    request: Request,
+    response: Response
+  ): Promise<Response> => {
+    const userUpdater = buildUserUpdaterApplicationService();
+
+    const controller = new UpdateUserEndpointController(
+      userUpdater
     );
 
     return await controller.execute({
