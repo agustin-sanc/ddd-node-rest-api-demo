@@ -30,4 +30,20 @@ export default class User {
     this.password = params.password;
     this.type = params.type;
   }
+
+  public getId(): ID {
+    return this.id;
+  }
+
+  public getEmailAddress(): EmailAddress {
+    return this.emailAddress;
+  }
+
+  public getPassword(): Password {
+    return this.password;
+  }
+
+  public getType(): string {
+    return this.type;
+  }
 }
