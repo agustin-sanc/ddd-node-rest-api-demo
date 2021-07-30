@@ -9,6 +9,9 @@ import FindUsersEndpointController from "./controllers/find-users-endpoint-contr
 import FindUserByIdEndpointController from "./controllers/find-user-by-id-endpoint-controller";
 import buildUserFinderByIdApplicationService
   from "../../../builders/users-application-services/build-user-finder-by-id-application-service";
+import DeleteUserByIdEndpointController from "./controllers/delete-user-by-id-endpoint-controller";
+import buildUserDeleterApplicationService
+  from "../../../builders/users-application-services/build-user-deleter-application-service";
 
 const router = Express.Router();
 
@@ -55,6 +58,23 @@ router.get('/api/v1/user',
 
     const controller = new FindUserByIdEndpointController(
       userFinderById
+    );
+
+    return await controller.execute({
+      request,
+      response
+    })
+  });
+
+router.delete('/api/v1/user',
+  async (
+    request: Request,
+    response: Response
+  ): Promise<Response> => {
+    const userDeleter = buildUserDeleterApplicationService();
+
+    const controller = new DeleteUserByIdEndpointController(
+      userDeleter
     );
 
     return await controller.execute({
