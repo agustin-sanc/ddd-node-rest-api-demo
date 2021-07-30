@@ -69,6 +69,9 @@ export default class UpdateUserEndpointController {
     if (!requestBody)
       throw new Error('Request body must be defined');
 
+    if (!requestBody.id)
+      throw new Error('id must be defined');
+
     if (!requestBody.emailAddress)
       throw new Error('emailAddress must be defined');
 
