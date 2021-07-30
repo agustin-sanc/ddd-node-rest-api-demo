@@ -23,7 +23,9 @@ export default class User {
     if (!params.type) throw new Error('type must be defined');
 
     if (!(params.type in UserTypes))
-      throw new Error('Invalid type');
+      throw new Error(
+        `Validation. Type ${ params.type } not allowed.`
+      );
 
     this.id = params.id;
     this.emailAddress = params.emailAddress;
