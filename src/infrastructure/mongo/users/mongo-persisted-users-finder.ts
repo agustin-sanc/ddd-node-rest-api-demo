@@ -4,10 +4,10 @@ import PersistedUsersFinder from "../../../application/interfaces/persisted-user
 import ID from "../../../domain/value-objects/id";
 import EmailAddress from "../../../domain/value-objects/email-address";
 import Password from "../../../domain/value-objects/password";
+import PersistedUserFinderById from "../../../application/interfaces/persisted-user-finder-by-id";
 
 export default class MongoPersistedUsersFinder
-  implements PersistedUsersFinder {
-
+  implements PersistedUsersFinder, PersistedUserFinderById {
   public async findPersistedUsers(): Promise<Array<User>> {
     const userMongoDocuments = await UserMongoDocumentModel
       .find()
@@ -15,21 +15,58 @@ export default class MongoPersistedUsersFinder
         console.error(error);
 
         throw new Error('Error finding persisted users in MongoDB');
-      })
+      });
 
-    return this.createDomainUsersArray(
+    return this.createDomainUsersFromMongoDocuments(
       userMongoDocuments
     );
   }
 
-  private createDomainUsersArray(userMongoDocuments: any): Promise<Array<User>> {
+  public async findPersistedUserById(id: ID): Promise<User> {
+    const userMongoDocument = await UserMongoDocumentModel
+      .findById(id.getValue())
+      .catch(error => {
+        console.error(error);
+
+        throw new Error(
+          `Error finding user with id ${ id.getValue() } in MongoDB`
+        )
+      });
+
+    if (!userMongoDocument)
+      throw new Error(
+        `User with id ${ id.getValue() } doesn't exist`
+      );
+
+    const domainUser =
+      this.createDomainUserFromMongoDocument(
+        userMongoDocument
+      );
+
+    return domainUser;
+  }
+
+  private createDomainUsersFromMongoDocuments(
+    userMongoDocuments: any
+  ): Promise<Array<User>> {
     return userMongoDocuments.map(( userMongoDocument ) => {
-      return new User({
-        id: new ID(userMongoDocument._id.toString()),
-        emailAddress: new EmailAddress(userMongoDocument.emailAddress),
-        password: new Password(userMongoDocument.password),
-        type: userMongoDocument.type
-      })
-    })
+      const domainUser =
+        this.createDomainUserFromMongoDocument(
+          userMongoDocument
+        );
+
+      return domainUser;
+    });
+  }
+
+  private createDomainUserFromMongoDocument(
+    userMongoDocument: any
+  ): User {
+    return new User({
+      id: new ID(userMongoDocument._id.toString()),
+      emailAddress: new EmailAddress(userMongoDocument.emailAddress),
+      password: new Password(userMongoDocument.password),
+      type: userMongoDocument.type
+    });
   }
 }
