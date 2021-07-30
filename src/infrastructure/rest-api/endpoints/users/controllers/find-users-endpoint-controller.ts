@@ -1,4 +1,4 @@
-import UsersFinder from "../../../../../application/users-finder";
+import UsersFinder from "../../../../../application/services/users-finder";
 import { Request, Response } from "express";
 import User from "../../../../../domain/entities/user";
 import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";

@@ -1,5 +1,5 @@
-import User from "../domain/entities/user";
-import PersistedUsersFinder from "./interfaces/persisted-users-finder";
+import User from "../../domain/entities/user";
+import PersistedUsersFinder from "../interfaces/persisted-users-finder";
 
 export default class UsersFinder {
   constructor(

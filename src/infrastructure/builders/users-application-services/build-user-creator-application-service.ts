@@ -1,5 +1,5 @@
 import MongoPersistedUserCreator from "../../mongo/users/mongo-persisted-user-creator";
-import UserCreator from "../../../application/user-creator";
+import UserCreator from "../../../application/services/user-creator";
 import MongoPersistedUsersFinder from "../../mongo/users/mongo-persisted-users-finder";
 
 export default function buildUserCreatorApplicationService()

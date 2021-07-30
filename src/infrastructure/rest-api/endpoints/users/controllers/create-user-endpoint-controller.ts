@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import UserCreator from "../../../../../application/user-creator";
+import UserCreator from "../../../../../application/services/user-creator";
 import EmailAddress from "../../../../../domain/value-objects/email-address";
 import Password from "../../../../../domain/value-objects/password";
 

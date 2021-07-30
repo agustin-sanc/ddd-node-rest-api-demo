@@ -1,10 +1,10 @@
-import PersistedUserUpdater from "./interfaces/persisted-user-updater";
-import PersistedUserFinderByEmailAddress from "./interfaces/persisted-user-finder-by-email-address";
-import EmailAddress from "../domain/value-objects/email-address";
-import Password from "../domain/value-objects/password";
-import PersistedUserFinderById from "./interfaces/persisted-user-finder-by-id";
-import ID from "../domain/value-objects/id";
-import User from "../domain/entities/user";
+import PersistedUserUpdater from "../interfaces/persisted-user-updater";
+import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
+import EmailAddress from "../../domain/value-objects/email-address";
+import Password from "../../domain/value-objects/password";
+import PersistedUserFinderById from "../interfaces/persisted-user-finder-by-id";
+import ID from "../../domain/value-objects/id";
+import User from "../../domain/entities/user";
 
 export default class UserUpdater {
   private readonly persistedUserUpdater: PersistedUserUpdater;

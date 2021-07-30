@@ -1,10 +1,10 @@
-import User from "../domain/entities/user";
-import PersistedUserCreator from "./interfaces/persisted-user-creator";
-import EmailAddress from "../domain/value-objects/email-address";
-import Password from "../domain/value-objects/password";
-import ID from "../domain/value-objects/id";
-import PersistedUserFinderByEmailAddress from "./interfaces/persisted-user-finder-by-email-address";
-import {UserTypes} from "../domain/enums/user-types";
+import User from "../../domain/entities/user";
+import PersistedUserCreator from "../interfaces/persisted-user-creator";
+import EmailAddress from "../../domain/value-objects/email-address";
+import Password from "../../domain/value-objects/password";
+import ID from "../../domain/value-objects/id";
+import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
+import {UserTypes} from "../../domain/enums/user-types";
 
 export default class UserCreator {
   private readonly persistedUserCreator: PersistedUserCreator;

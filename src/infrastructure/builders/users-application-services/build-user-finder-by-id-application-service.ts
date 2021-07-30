@@ -1,5 +1,5 @@
 import MongoPersistedUsersFinder from "../../mongo/users/mongo-persisted-users-finder";
-import UserFinderById from "../../../application/user-finder-by-id";
+import UserFinderById from "../../../application/services/user-finder-by-id";
 
 export default function buildUserFinderByIdApplicationService()
   : UserFinderById {

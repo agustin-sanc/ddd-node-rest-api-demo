@@ -1,6 +1,6 @@
-import User from "../domain/entities/user";
-import ID from "../domain/value-objects/id";
-import PersistedUserFinderById from "./interfaces/persisted-user-finder-by-id";
+import User from "../../domain/entities/user";
+import ID from "../../domain/value-objects/id";
+import PersistedUserFinderById from "../interfaces/persisted-user-finder-by-id";
 
 export default class UserFinderById {
   constructor(

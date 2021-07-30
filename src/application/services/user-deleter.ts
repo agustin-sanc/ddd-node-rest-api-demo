@@ -1,5 +1,5 @@
-import PersistedUserDeleter from "./interfaces/persisted-user-deleter";
-import ID from "../domain/value-objects/id";
+import PersistedUserDeleter from "../interfaces/persisted-user-deleter";
+import ID from "../../domain/value-objects/id";
 
 export default class UserDeleter {
   constructor(
