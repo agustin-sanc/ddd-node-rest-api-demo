@@ -35,14 +35,14 @@ export default class CreateUserEndpointController {
     } catch(error) {
       console.error(error);
 
-      if (error.message.includes('Conflict error'))
+      if (error.message.includes('Conflict'))
         return response
           .status(409)
           .send({
             error: error.message
           })
 
-      if (error.message.includes('Validation error'))
+      if (error.message.includes('Validation'))
         return response
           .status(422)
           .send({
@@ -62,17 +62,17 @@ export default class CreateUserEndpointController {
     });
   }
 
-  private validateRequestBody(body: any): void {
-    if (!body)
+  private validateRequestBody(requestBody: any): void {
+    if (!requestBody)
       throw new Error('Request body must be defined');
 
-    if (!body.emailAddress)
+    if (!requestBody.emailAddress)
       throw new Error('emailAddress must be defined');
 
-    if (!body.password)
+    if (!requestBody.password)
       throw new Error('password must be defined');
 
-    if (!body.type)
+    if (!requestBody.type)
       throw new Error('type must be defined');
   }
 }

@@ -62,8 +62,8 @@ export default class FindUserByIdEndpointController {
       })
   }
 
-  private validateRequestParams(params: any): void {
-    if (!params.id)
+  private validateRequestParams(requestParams: any): void {
+    if (!requestParams.id)
       throw new Error('id parameter must be defined');
   }
 }
