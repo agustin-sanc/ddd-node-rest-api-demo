@@ -5,9 +5,12 @@ import ID from "../../../domain/value-objects/id";
 import EmailAddress from "../../../domain/value-objects/email-address";
 import Password from "../../../domain/value-objects/password";
 import PersistedUserFinderById from "../../../application/interfaces/persisted-user-finder-by-id";
+import PersistedUserFinderByEmailAddress from "../../../application/interfaces/persisted-user-finder-by-email-address";
 
 export default class MongoPersistedUsersFinder
-  implements PersistedUsersFinder, PersistedUserFinderById {
+  implements PersistedUsersFinder, PersistedUserFinderById,
+    PersistedUserFinderByEmailAddress
+{
   public async findPersistedUsers(): Promise<Array<User>> {
     const userMongoDocuments = await UserMongoDocumentModel
       .find()
@@ -23,8 +26,10 @@ export default class MongoPersistedUsersFinder
   }
 
   public async findPersistedUserById(id: ID): Promise<User> {
-    const userMongoDocument = await UserMongoDocumentModel
-      .findById(id.getValue())
+    const foundUserDocument = await UserMongoDocumentModel
+      .findById(
+        id.getValue()
+      )
       .catch(error => {
         console.error(error);
 
@@ -33,17 +38,39 @@ export default class MongoPersistedUsersFinder
         )
       });
 
-    if (!userMongoDocument)
-      throw new Error(
-        `User with id ${ id.getValue() } doesn't exist`
-      );
+    let domainUserToReturn: User;
 
-    const domainUser =
-      this.createDomainUserFromMongoDocument(
-        userMongoDocument
+    if (foundUserDocument) {
+      domainUserToReturn = this.createDomainUserFromMongoDocument(
+        foundUserDocument
       );
+    }
 
-    return domainUser;
+    return domainUserToReturn;
+  }
+
+  public async findPersistedUserByEmailAddress(emailAddress: EmailAddress): Promise<User> {
+    const foundUserDocument = await UserMongoDocumentModel
+      .findOne({
+        emailAddress: emailAddress.getValue()
+      })
+      .catch(error => {
+        console.error(error);
+
+        throw new Error(
+          `Error finding user with email address ${ emailAddress.getValue() } in MongoDB`
+        );
+      })
+
+    let domainUserToReturn: User;
+
+    if (foundUserDocument) {
+      domainUserToReturn = this.createDomainUserFromMongoDocument(
+        foundUserDocument
+      );
+    }
+
+    return domainUserToReturn;
   }
 
   private createDomainUsersFromMongoDocuments(
