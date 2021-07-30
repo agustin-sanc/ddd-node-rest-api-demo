@@ -3,7 +3,7 @@ import UserCreator from "../../../../../application/user-creator";
 import EmailAddress from "../../../../../domain/value-objects/email-address";
 import Password from "../../../../../domain/value-objects/password";
 
-export default class UserCreateRequestController {
+export default class CreateUserEndpointController {
   constructor(
     private readonly userCreator: UserCreator
   ) {
@@ -35,14 +35,14 @@ export default class UserCreateRequestController {
     } catch(error) {
       console.error(error);
 
-      if (error.message.contains('Conflict Error'))
+      if (error.message.includes('Conflict error'))
         return response
           .status(409)
           .send({
             error: error.message
           })
 
-      if (error.message.contains('Validation Error'))
+      if (error.message.includes('Validation error'))
         return response
           .status(422)
           .send({
@@ -52,7 +52,7 @@ export default class UserCreateRequestController {
       return response
         .status(500)
         .send({
-          error: 'Internal Server Error',
+          error: 'Internal server error',
           description: error.message
         })
     }
@@ -63,7 +63,8 @@ export default class UserCreateRequestController {
   }
 
   private validateRequestBody(body: any): void {
-    if (!body) throw new Error('Request body must be defined');
+    if (!body)
+      throw new Error('Request body must be defined');
 
     if (!body.emailAddress)
       throw new Error('emailAddress must be defined');

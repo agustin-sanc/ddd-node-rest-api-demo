@@ -1,8 +1,9 @@
 import UsersFinder from "../../../../../application/users-finder";
 import { Request, Response } from "express";
 import User from "../../../../../domain/entities/user";
+import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
 
-export default class UsersFinderRequestController {
+export default class FindUsersEndpointController {
   constructor(
     private readonly usersFinder: UsersFinder
   ) {
@@ -15,6 +16,7 @@ export default class UsersFinderRequestController {
     response: Response
   }) : Promise<Response> {
     const { response } = params;
+
     let users: User[];
 
     try {
@@ -25,7 +27,7 @@ export default class UsersFinderRequestController {
       return response
         .status(500)
         .send({
-          error: 'Internal Server Error',
+          error: 'Internal server error',
           description: error.message
         })
     }
@@ -35,12 +37,7 @@ export default class UsersFinderRequestController {
       .send({
         message: 'Users obtained successfully',
         users: users.map(user => {
-          return {
-            id: user.getId().getValue(),
-            emailAddress: user.getEmailAddress().getValue(),
-            password: user.getPassword().getValue(),
-            type: user.getType()
-          }
+          return getRawUserObject(user);
         })
       });
   }
