@@ -2,7 +2,7 @@ import { UserMongoDocumentModel } from "./user-mongo-document-model";
 import PersistedUserDeleter from "../../../application/interfaces/persisted-user-deleter";
 import ID from "../../../domain/value-objects/id";
 
-export default class MongoPersistedUserCreator
+export default class MongoPersistedUserDeleter
   implements PersistedUserDeleter {
   public async deletePersistedUser(id: ID): Promise<void> {
     await UserMongoDocumentModel
