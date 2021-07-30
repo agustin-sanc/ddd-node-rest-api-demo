@@ -1,0 +1,1 @@
+export const REST_API_SERVER_URI_PREFIX: string = '/api/v1/';
