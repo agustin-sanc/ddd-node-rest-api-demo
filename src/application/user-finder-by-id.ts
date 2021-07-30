@@ -13,6 +13,15 @@ export default class UserFinderById {
   public async findUserById(id: ID): Promise<User> {
     return await this.persistedUserFinderById
       .findPersistedUserById(id)
+      .then(( foundUser: User ) => {
+        if (!foundUser) {
+          throw new Error(
+            `User with id ${ id.getValue() } doesn't exist`
+          );
+        }
+
+        return foundUser;
+      })
       .catch(error => {
         console.error(error);
 
