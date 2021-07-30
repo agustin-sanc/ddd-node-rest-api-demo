@@ -1,4 +1,5 @@
 import * as Mongoose from 'mongoose';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
 export default async function createConnectionWithMongoDB(URI?: string): Promise<any> {
   if(!URI) URI = process.env.MONGODB_URI;
@@ -43,4 +44,11 @@ function setOnErrorBehaviour(database: any): void {
   database.connection.on('error', (error) => {
     console.error(error);
   });
+}
+
+export async function setupMongoMemoryDatabase(): Promise<void> {
+  const server = await MongoMemoryServer.create();
+  const uri = server.getUri();
+
+  await createConnectionWithMongoDB(uri);
 }
