@@ -2,10 +2,12 @@ export default class Password {
   constructor(
     private readonly value: string
   ) {
-    if(!value) throw new Error('Password value must be defined')
+    if(!value) throw new Error('Password value must be defined.')
 
     if(value.length < 4)
-      throw new Error('Password value must have length greater than four characters')
+      throw new Error(
+        'Validation error. Password value must have length greater than four characters.'
+      );
   }
 
   public getValue(): string {

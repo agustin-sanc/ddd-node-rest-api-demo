@@ -2,10 +2,15 @@ export default class EmailAddress {
   constructor(
     private readonly value: string
   ) {
-    if(!value) throw new Error('Email address value must be defined')
+    if(!value)
+      throw new Error(
+        'Email address value must be defined.'
+      );
 
     if(!this.isValidValueFormat())
-      throw new Error('Email address value is invalid')
+      throw new Error(
+        'Validation error. Email address must have valid format.'
+      );
   }
 
   private isValidValueFormat(): boolean {
