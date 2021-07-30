@@ -2,17 +2,17 @@ import * as Express from 'express';
 import {Request, Response} from 'express';
 import CreateUserEndpointController from "./controllers/create-user-endpoint-controller";
 import buildUserCreatorApplicationService
-  from "../../../builders/users-application-services/build-user-creator-application-service";
+  from "../../../builders/build-user-creator-application-service";
 import buildUsersFinderApplicationService
-  from "../../../builders/users-application-services/build-users-finder-application-service";
+  from "../../../builders/build-users-finder-application-service";
 import FindUsersEndpointController from "./controllers/find-users-endpoint-controller";
 import FindUserByIdEndpointController from "./controllers/find-user-by-id-endpoint-controller";
 import DeleteUserByIdEndpointController from "./controllers/delete-user-by-id-endpoint-controller";
 import buildUserDeleterApplicationService
-  from "../../../builders/users-application-services/build-user-deleter-application-service";
+  from "../../../builders/build-user-deleter-application-service";
 import UpdateUserEndpointController from "./controllers/update-user-endpoint-controller";
 import buildUserUpdaterApplicationService
-  from "../../../builders/users-application-services/build-user-updater-application-service";
+  from "../../../builders/build-user-updater-application-service";
 
 const router = Express.Router();
 

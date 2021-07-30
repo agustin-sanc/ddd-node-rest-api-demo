@@ -1,6 +1,6 @@
-import { UserMongoDocumentModel } from "../../models/user-mongo-document-model";
-import PersistedUserDeleter from "../../../../application/interfaces/persisted-user-deleter";
-import ID from "../../../../domain/value-objects/id";
+import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
+import PersistedUserDeleter from "../../../application/interfaces/persisted-user-deleter";
+import ID from "../../../domain/value-objects/id";
 
 export default class MongoPersistedUserDeleter
   implements PersistedUserDeleter {

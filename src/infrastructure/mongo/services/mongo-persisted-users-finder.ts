@@ -1,11 +1,11 @@
-import User from "../../../../domain/entities/user";
-import { UserMongoDocumentModel } from "../../models/user-mongo-document-model";
-import PersistedUsersFinder from "../../../../application/interfaces/persisted-users-finder";
-import ID from "../../../../domain/value-objects/id";
-import EmailAddress from "../../../../domain/value-objects/email-address";
-import Password from "../../../../domain/value-objects/password";
-import PersistedUserFinderById from "../../../../application/interfaces/persisted-user-finder-by-id";
-import PersistedUserFinderByEmailAddress from "../../../../application/interfaces/persisted-user-finder-by-email-address";
+import User from "../../../domain/entities/user";
+import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
+import PersistedUsersFinder from "../../../application/interfaces/persisted-users-finder";
+import ID from "../../../domain/value-objects/id";
+import EmailAddress from "../../../domain/value-objects/email-address";
+import Password from "../../../domain/value-objects/password";
+import PersistedUserFinderById from "../../../application/interfaces/persisted-user-finder-by-id";
+import PersistedUserFinderByEmailAddress from "../../../application/interfaces/persisted-user-finder-by-email-address";
 
 export default class MongoPersistedUsersFinder
   implements PersistedUsersFinder, PersistedUserFinderById,
