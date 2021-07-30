@@ -1,4 +1,4 @@
-import { UserMongoDocumentModel } from "./user-mongo-document-model";
+import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
 import PersistedUserDeleter from "../../../application/interfaces/persisted-user-deleter";
 import ID from "../../../domain/value-objects/id";
 

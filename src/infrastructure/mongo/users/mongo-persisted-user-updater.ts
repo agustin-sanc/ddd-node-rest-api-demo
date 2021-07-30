@@ -1,5 +1,5 @@
 import User from "../../../domain/entities/user";
-import { UserMongoDocumentModel } from "./user-mongo-document-model";
+import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
 import PersistedUserUpdater from "../../../application/interfaces/persisted-user-updater";
 
 export default class MongoPersistedUserUpdater

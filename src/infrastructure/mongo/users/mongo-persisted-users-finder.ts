@@ -1,5 +1,5 @@
 import User from "../../../domain/entities/user";
-import { UserMongoDocumentModel } from "./user-mongo-document-model";
+import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
 import PersistedUsersFinder from "../../../application/interfaces/persisted-users-finder";
 import ID from "../../../domain/value-objects/id";
 import EmailAddress from "../../../domain/value-objects/email-address";
