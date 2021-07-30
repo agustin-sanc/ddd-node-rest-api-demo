@@ -41,6 +41,10 @@ export default class User {
     return this.id.equals(id);
   }
 
+  public hasPassword(password: Password): boolean {
+    return this.password.equals(password);
+  }
+
   public getEmailAddress(): EmailAddress {
     return this.emailAddress;
   }

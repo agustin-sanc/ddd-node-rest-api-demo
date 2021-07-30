@@ -4,6 +4,7 @@ import PersistedUserFinderById from "../interfaces/persisted-user-finder-by-id";
 import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
 import PersistedUsersFinder from "../interfaces/persisted-users-finder";
 import EmailAddress from "../../domain/value-objects/email-address";
+import Password from "../../domain/value-objects/password";
 
 export default class UsersFinder {
   private readonly persistedUsersFinder: PersistedUsersFinder;
@@ -55,6 +56,33 @@ export default class UsersFinder {
           `Error finding persisted user with email address ${ emailAddress.getValue() }.`
         );
       });
+  }
+
+  public async findUserByEmailAddressAndPassword(
+    params: {
+      emailAddress: EmailAddress,
+      password: Password
+    }
+  ): Promise<User> {
+    const user = await this.findUserByEmailAddress(
+        params.emailAddress
+      ).catch(error => {
+        console.error(error);
+
+        if (error.message.includes('Not found'))
+          throw new Error(
+            'Invalid credentials'
+          );
+
+        throw error;
+      })
+
+    if(!user.hasPassword(params.password))
+      throw new Error(
+        `Invalid credentials`
+      );
+
+    return user;
   }
 
   public async findUserById(id: ID): Promise<User> {
