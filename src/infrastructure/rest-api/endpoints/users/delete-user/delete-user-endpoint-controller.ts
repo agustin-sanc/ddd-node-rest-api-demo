@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import ID from "../../../../../domain/value-objects/id";
 import UserDeleter from "../../../../../application/services/user-deleter";
 
-export default class DeleteUserByIdEndpointController {
+export default class DeleteUserEndpointController {
   constructor(
     private readonly userDeleter: UserDeleter
   ) {

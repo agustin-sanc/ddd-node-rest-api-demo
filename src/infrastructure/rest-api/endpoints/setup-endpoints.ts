@@ -1,11 +1,15 @@
 import {Application} from "express";
+import getUserEndpointsRouter from "./users/user-endpoints-router";
+import getSessionEndpointsRouter from "./login/session-endpoints-router";
 
-const UserEndpointHandlers = require("./users/user-endpoints-router")
+const userEndpointsRouter = getUserEndpointsRouter();
+const sessionEndpointsRouter = getSessionEndpointsRouter();
 
 export default function setupEndpoints(
   expressApplication: Application
 ): void {
   expressApplication.use('/',
-    UserEndpointHandlers
-  )
+    userEndpointsRouter,
+    sessionEndpointsRouter
+  );
 }
