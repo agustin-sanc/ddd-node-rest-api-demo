@@ -64,4 +64,8 @@ export default class User {
   public changePasswordTo(password: Password): void {
     this.password = password;
   }
+
+  public hasType(type: string): boolean {
+    return this.type === type;
+  }
 }
