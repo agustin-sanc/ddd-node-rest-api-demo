@@ -1,14 +1,14 @@
 import {Application} from "express";
-import getUserEndpointsRouter from "./users/user-endpoints-router";
-import getSessionEndpointsRouter from "./sessions/session-endpoints-router";
+import getUsersRouter from "./users/get-users-router";
+import getSessionsRouter from "./sessions/session-endpoints-router";
 
-const userEndpointsRouter = getUserEndpointsRouter();
-const sessionEndpointsRouter = getSessionEndpointsRouter();
+const userEndpointsRouter = getUsersRouter();
+const sessionEndpointsRouter = getSessionsRouter();
 
 export default function setupEndpoints(
   expressApplication: Application
 ): void {
-  expressApplication.use('/',
+  expressApplication.use(
     userEndpointsRouter,
     sessionEndpointsRouter
   );
