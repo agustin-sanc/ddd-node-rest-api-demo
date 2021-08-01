@@ -5,6 +5,8 @@ import Password from "../../domain/value-objects/password";
 import ID from "../../domain/value-objects/id";
 import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
 import {UserTypes} from "../../domain/enums/user-types";
+import ConflictError from "../../infrastructure/rest-api/middlewares/errors/conflict-error";
+import UnprocessableEntityError from "../../infrastructure/rest-api/middlewares/errors/unprocessable-entity-error";
 
 export default class UserCreator {
   private readonly persistedUserCreator: PersistedUserCreator;
@@ -38,14 +40,14 @@ export default class UserCreator {
         );
 
     if (foundUserWithSameEmailAddress) {
-      throw new Error(
-        `Conflict. Email address is already taken.`
+      throw new ConflictError(
+        `Email address is already taken.`
       );
     }
 
     if (params.type === UserTypes.ADMIN_USER) {
-      throw new Error(
-        `Validation. Admin user only can be created directly into database.`
+      throw new UnprocessableEntityError(
+        `Admin user only can be created directly into database.`
       )
     }
 
