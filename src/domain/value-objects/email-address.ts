@@ -9,7 +9,7 @@ export default class EmailAddress {
 
     if(!this.isValidValueFormat())
       throw new Error(
-        'Validation error. Email address must have valid format.'
+        'Email address must have valid format.'
       );
   }
 
