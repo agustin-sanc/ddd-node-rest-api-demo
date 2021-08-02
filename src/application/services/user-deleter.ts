@@ -27,7 +27,7 @@ export default class UserDeleter {
         console.error(error);
 
         throw new Error(
-          `Error deleting user with id ${ id.getValue() } from persistence`
+          `Error deleting user with id ${ id.getValue() } from persistence.`
         );
       })
   }
@@ -40,9 +40,9 @@ export default class UserDeleter {
     params: ConstructorParams
   ): void {
     if (!params.persistedUserDeleter)
-      throw new Error('persistedUserDeleter must be defined');
+      throw new Error('persistedUserDeleter must be defined.');
 
     if (!params.usersFinder)
-      throw new Error('usersFinder must be defined');
+      throw new Error('usersFinder must be defined.');
   }
 }
