@@ -5,6 +5,9 @@ import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-find
 import PersistedUsersFinder from "../interfaces/persisted-users-finder";
 import EmailAddress from "../../domain/value-objects/email-address";
 import Password from "../../domain/value-objects/password";
+import NotFoundError from "../../infrastructure/rest-api/middlewares/errors/not-found-error";
+import ConflictError from "../../infrastructure/rest-api/middlewares/errors/conflict-error";
+import InvalidCredentialsError from "../../infrastructure/rest-api/middlewares/errors/invalid-credentials-error";
 
 interface ConstructorParams {
   persistedUsersFinder: PersistedUsersFinder;
@@ -31,7 +34,7 @@ export default class UsersFinder {
       .catch(error => {
         console.error(error);
         throw new Error('Error finding persisted users');
-      })
+      });
   }
 
   public async findUserByEmailAddress(
@@ -41,8 +44,8 @@ export default class UsersFinder {
       .findPersistedUserByEmailAddress(emailAddress)
       .then(( foundUser: User ) => {
         if (!foundUser) {
-          throw new Error(
-            `Not found. User with email address ${ emailAddress.getValue() } doesn't exist.`
+          throw new NotFoundError(
+            `User with email address ${ emailAddress.getValue() } doesn't exist.`
           );
         }
 
@@ -51,13 +54,40 @@ export default class UsersFinder {
       .catch(error => {
         console.error(error);
 
-        if (error.message.includes("doesn't exist."))
+        if (error instanceof NotFoundError)
           throw error;
 
         throw new Error(
           `Error finding persisted user with email address ${ emailAddress.getValue() }.`
         );
       });
+  }
+
+  public async checkIfEmailAddressIsAvailableForNewUser(
+    emailAddress: EmailAddress
+  ): Promise<void> {
+    const user = await this.findUserByEmailAddress(emailAddress)
+      .catch(error => {
+        if (!(error instanceof NotFoundError))
+          throw error;
+      });
+
+    if (user)
+      throw new ConflictError('Email address is already taken.');
+  }
+
+  public async checkIfEmailAddressIsAvailableForUpdateUser(params: {
+    id: ID,
+    emailAddress: EmailAddress
+  }): Promise<void> {
+    const user = await this.findUserByEmailAddress(params.emailAddress)
+      .catch(error => {
+        if (!(error instanceof NotFoundError))
+          throw error;
+      });
+
+    if (user && !(user.hasId(params.id)))
+      throw new ConflictError('Email address is already taken.');
   }
 
   public async findUserByEmailAddressAndPassword(
@@ -71,18 +101,14 @@ export default class UsersFinder {
       ).catch(error => {
         console.error(error);
 
-        if (error.message.includes('Not found'))
-          throw new Error(
-            'Invalid credentials'
-          );
+        if (error instanceof NotFoundError)
+          throw new InvalidCredentialsError();
 
         throw error;
       })
 
     if(!user.hasPassword(params.password))
-      throw new Error(
-        `Invalid credentials`
-      );
+      throw new InvalidCredentialsError();
 
     return user;
   }
@@ -92,8 +118,8 @@ export default class UsersFinder {
       .findPersistedUserById(id)
       .then(( foundUser: User ) => {
         if (!foundUser) {
-          throw new Error(
-            `Not found. User with id ${ id.getValue() } doesn't exist.`
+          throw new NotFoundError(
+            `User with id ${ id.getValue() } doesn't exist.`
           );
         }
 
@@ -102,7 +128,7 @@ export default class UsersFinder {
       .catch(error => {
         console.error(error);
 
-        if (error.message.includes("doesn't exist."))
+        if (error instanceof NotFoundError)
           throw error;
 
         throw new Error(
