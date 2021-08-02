@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import getRawUserObject from "../../../../domain/mappers/get-raw-user-object";
-import buildUsersFinderApplicationService from "../../../builders/build-users-finder-application-service";
-import User from "../../../../domain/entities/user";
+import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
+import buildUsersFinderApplicationService from "../../../../builders/build-users-finder-application-service";
+import User from "../../../../../domain/entities/user";
 
 export default async function findUsersController(
   request: Request,

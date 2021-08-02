@@ -1,14 +1,14 @@
 import * as Express from 'express';
 import { Router } from 'express';
-import handleUpdateUserEndpointRequest from "./update-user/update-user-endpoint-handler";
-import handleFindUserByIdEndpointRequest from "./find-user-by-id/find-user-by-id-endpoint-handler";
-import handleDeleteUserEndpointRequest from "./delete-user/delete-user-endpoint-handler";
-import authenticationMiddleware from "../../middlewares/auth/authentication-middleware";
-import adminAuthorizationMiddleware from "../../middlewares/auth/admin-authorization-middleware";
-import createUserController from "./create-user-controller";
-import findUsersController from "./find-users-controller";
+import authenticateUser from "../../middlewares/auth/authenticate-user";
+import authorizeAdminUserOnly from "../../middlewares/auth/authorize-admin-user-only";
+import createUserController from "./controllers/create-user-controller";
+import findUsersController from "./controllers/find-users-controller";
+import updateUserController from "./controllers/update-user-controller";
+import deleteUserController from "./controllers/delete-user-controller";
+import findUserByIdController from "./controllers/find-user-by-id-controller";
 
-export default function getUsersRouter(): Router {
+export default function setupUsersRouter(): Router {
   const router = Express.Router();
 
   /**
@@ -43,8 +43,8 @@ export default function getUsersRouter(): Router {
 
   router.patch(
     '/api/v1/user',
-    authenticationMiddleware,
-    handleUpdateUserEndpointRequest
+    authenticateUser,
+    updateUserController
   );
 
   /**
@@ -59,8 +59,8 @@ export default function getUsersRouter(): Router {
 
   router.get(
     '/api/v1/users',
-    authenticationMiddleware,
-    adminAuthorizationMiddleware,
+    authenticateUser,
+    authorizeAdminUserOnly,
     findUsersController
   );
 
@@ -80,8 +80,8 @@ export default function getUsersRouter(): Router {
 
   router.get(
     '/api/v1/user',
-    authenticationMiddleware,
-    handleFindUserByIdEndpointRequest
+    authenticateUser,
+    findUserByIdController
   );
 
   /**
@@ -96,9 +96,9 @@ export default function getUsersRouter(): Router {
 
   router.delete(
     '/api/v1/user',
-    authenticationMiddleware,
-    adminAuthorizationMiddleware,
-    handleDeleteUserEndpointRequest
+    authenticateUser,
+    authorizeAdminUserOnly,
+    deleteUserController
   );
 
   return router;

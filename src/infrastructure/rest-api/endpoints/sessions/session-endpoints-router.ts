@@ -1,11 +1,21 @@
 import * as Express from 'express';
 import {Router} from 'express';
-import handleCreateSessionEndpointRequest from "./create-session/create-session-endpoint-handler";
+import createSessionController from "./controllers/create-session-controller";
 
-export default function getSessionsRouter(): Router {
+export default function setupSessionsRouter(): Router {
   const router = Express.Router();
 
-  router.post('/api/v1/session', handleCreateSessionEndpointRequest);
+  /**
+   *  POST /api/v1/session
+   *
+   *  AUTH REQUIRED?
+   *  - No.
+   */
+
+  router.post(
+    '/api/v1/session',
+    createSessionController
+  );
 
   return router;
 }

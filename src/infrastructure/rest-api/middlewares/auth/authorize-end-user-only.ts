@@ -3,7 +3,7 @@ import User from "../../../../domain/entities/user";
 import ForbiddenError from "../errors/forbidden-error";
 import { Request, Response } from 'express';
 
-export default function adminAuthorizationMiddleware(
+export default function authorizeEndUserOnly(
   request: Request,
   response: Response,
   next: any
@@ -11,7 +11,7 @@ export default function adminAuthorizationMiddleware(
   const user: User = request.user;
 
   const allowedUserTypes = [
-    UserTypes.ADMIN_USER
+    UserTypes.END_USER
   ];
 
   for (const allowedUserType of allowedUserTypes) {
