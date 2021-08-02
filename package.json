@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/agustin-sanc/node-rest-api-demo#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.24",
     "@types/node": "^16.4.7",
     "jest": "^27.0.6",
     "nodemon": "^2.0.12",
