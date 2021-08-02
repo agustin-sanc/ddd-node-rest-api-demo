@@ -5,15 +5,9 @@ import {UserTypes} from "../../../domain/enums/user-types";
 import User from "../../../domain/entities/user";
 import { UserMongoDocumentModel } from "../models/user-mongo-document-model";
 
-export default async function createAdminUserIntoMongoDB()
-  : Promise<void> {
-  const user = new User({
-    id: ID.create(),
-    emailAddress: new EmailAddress('admin@email.com'),
-    password: new Password('1234'),
-    type: UserTypes.ADMIN_USER
-  })
-
+export default async function createUserIntoMongoDB(
+  user: User
+): Promise<void> {
   const userDocument = new UserMongoDocumentModel({
     _id: user.getId().getValue(),
     emailAddress: user.getEmailAddress().getValue(),
@@ -23,11 +17,23 @@ export default async function createAdminUserIntoMongoDB()
 
   await userDocument.save()
     .then(() => {
-      console.log('Admin user created successfully in MongoDB.');
+      console.log(`User of type ${user.getType()} created successfully in MongoDB.`);
     })
     .catch((error) => {
       console.error(error);
       throw new Error('Error saving user document in MongoDB.');
     });
+}
+
+export async function createAdminUserIntoMongoDB()
+  : Promise<void> {
+  const admin = new User({
+    id: new ID('1'),
+    emailAddress: new EmailAddress('admin@email.com'),
+    password: new Password('1234'),
+    type: UserTypes.ADMIN_USER
+  })
+
+  await createUserIntoMongoDB(admin);
 }
 
