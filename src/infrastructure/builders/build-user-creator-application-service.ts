@@ -1,16 +1,14 @@
 import MongoPersistedUserCreator from "../mongo/services/mongo-persisted-user-creator";
 import UserCreator from "../../application/services/user-creator";
-import MongoPersistedUsersFinder from "../mongo/services/mongo-persisted-users-finder";
+import buildUsersFinderApplicationService from "./build-users-finder-application-service";
 
 export default function buildUserCreatorApplicationService()
   : UserCreator {
   const persistedUserCreator = new MongoPersistedUserCreator();
-
-  const persistedUserFinderByEmailAddress =
-    new MongoPersistedUsersFinder();
+  const usersFinder = buildUsersFinderApplicationService();
 
   return new UserCreator({
     persistedUserCreator,
-    persistedUserFinderByEmailAddress
+    usersFinder
   });
 }
