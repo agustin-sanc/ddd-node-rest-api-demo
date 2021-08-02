@@ -2,14 +2,16 @@ import PersistedUserDeleter from "../interfaces/persisted-user-deleter";
 import ID from "../../domain/value-objects/id";
 import UsersFinder from "./users-finder";
 
+interface ConstructorParams {
+  persistedUserDeleter: PersistedUserDeleter;
+  usersFinder: UsersFinder;
+}
+
 export default class UserDeleter {
   private readonly persistedUserDeleter: PersistedUserDeleter;
   private readonly usersFinder: UsersFinder;
 
-  constructor(params: {
-    persistedUserDeleter: PersistedUserDeleter,
-    usersFinder: UsersFinder;
-  }) {
+  constructor(params: ConstructorParams) {
     this.checkForUndefinedConstructorParams(params);
 
     this.persistedUserDeleter = params.persistedUserDeleter;
@@ -17,7 +19,7 @@ export default class UserDeleter {
   }
 
   public async deleteUser(id: ID): Promise<void> {
-    await this.usersFinder.findUserById(id)
+    await this.checkIfExistsUserWithId(id);
 
     await this.persistedUserDeleter
       .deletePersistedUser(id)
@@ -30,10 +32,13 @@ export default class UserDeleter {
       })
   }
 
-  private checkForUndefinedConstructorParams(params: {
-    persistedUserDeleter: PersistedUserDeleter,
-    usersFinder: UsersFinder;
-  }): void {
+  private async checkIfExistsUserWithId(id: ID): Promise<void> {
+    await this.usersFinder.findUserById(id)
+  }
+
+  private checkForUndefinedConstructorParams(
+    params: ConstructorParams
+  ): void {
     if (!params.persistedUserDeleter)
       throw new Error('persistedUserDeleter must be defined');
 

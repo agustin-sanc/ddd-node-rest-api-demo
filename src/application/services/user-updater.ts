@@ -4,29 +4,32 @@ import Password from "../../domain/value-objects/password";
 import ID from "../../domain/value-objects/id";
 import UsersFinder from "./users-finder";
 
+interface ConstructorParams {
+  persistedUserUpdater: PersistedUserUpdater;
+  usersFinder: UsersFinder;
+}
+
+interface UpdateUserParams {
+  id: ID;
+  emailAddress: EmailAddress;
+  password: Password;
+}
+
 export default class UserUpdater {
   private readonly persistedUserUpdater: PersistedUserUpdater;
   private readonly usersFinder: UsersFinder;
 
-  constructor(params: {
-    persistedUserUpdater: PersistedUserUpdater,
-    usersFinder: UsersFinder
-  }) {
+  constructor(params: ConstructorParams) {
     this.checkForUndefinedConstructorParams(params);
 
-    this.persistedUserUpdater =
-      params.persistedUserUpdater;
-
+    this.persistedUserUpdater = params.persistedUserUpdater;
     this.usersFinder = params.usersFinder;
   }
 
-  public async updateUser(params: {
-    id: ID,
-    emailAddress: EmailAddress,
-    password: Password,
-  }): Promise<void> {
+  public async updateUser(
+    params: UpdateUserParams
+  ): Promise<void> {
     this.checkForUndefinedUpdateUserParams(params);
-
     const {id, emailAddress, password} = params;
 
     const user = await this.usersFinder.findUserById(id);
@@ -65,10 +68,9 @@ export default class UserUpdater {
       })
   }
 
-  private checkForUndefinedConstructorParams(params: {
-    persistedUserUpdater: PersistedUserUpdater,
-    usersFinder: UsersFinder
-  }): void {
+  private checkForUndefinedConstructorParams(
+    params: ConstructorParams
+  ): void {
     if (!params.persistedUserUpdater)
       throw new Error('persistedUserUpdater must be defined.');
 
@@ -76,11 +78,9 @@ export default class UserUpdater {
       throw new Error('usersFinder must be defined.');
   }
 
-  private checkForUndefinedUpdateUserParams(params: {
-    id: ID,
-    emailAddress: EmailAddress,
-    password: Password,
-  }): void {
+  private checkForUndefinedUpdateUserParams(
+    params: UpdateUserParams
+  ): void {
     if (!params.id)
       throw new Error('id must be defined.');
 

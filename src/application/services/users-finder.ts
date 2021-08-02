@@ -6,16 +6,18 @@ import PersistedUsersFinder from "../interfaces/persisted-users-finder";
 import EmailAddress from "../../domain/value-objects/email-address";
 import Password from "../../domain/value-objects/password";
 
+interface ConstructorParams {
+  persistedUsersFinder: PersistedUsersFinder;
+  persistedUserFinderById: PersistedUserFinderById;
+  persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress;
+}
+
 export default class UsersFinder {
   private readonly persistedUsersFinder: PersistedUsersFinder;
   private readonly persistedUserFinderById: PersistedUserFinderById;
   private readonly persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress;
 
-  constructor(params: {
-    persistedUsersFinder: PersistedUsersFinder,
-    persistedUserFinderById: PersistedUserFinderById,
-    persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress,
-  }) {
+  constructor(params: ConstructorParams) {
     this.checkForUndefinedConstructorParams(params);
 
     this.persistedUsersFinder = params.persistedUsersFinder;
@@ -109,11 +111,9 @@ export default class UsersFinder {
       });
   }
 
-  private checkForUndefinedConstructorParams(params: {
-    persistedUsersFinder: PersistedUsersFinder,
-    persistedUserFinderById: PersistedUserFinderById,
-    persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress,
-  }) {
+  private checkForUndefinedConstructorParams(
+    params: ConstructorParams
+  ): void {
     if (!params.persistedUserFinderById)
       throw new Error('persistedUserFinderById must be defined.');
 

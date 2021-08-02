@@ -3,29 +3,25 @@ import PersistedUserCreator from "../interfaces/persisted-user-creator";
 import EmailAddress from "../../domain/value-objects/email-address";
 import Password from "../../domain/value-objects/password";
 import ID from "../../domain/value-objects/id";
-import PersistedUserFinderByEmailAddress from "../interfaces/persisted-user-finder-by-email-address";
 import {UserTypes} from "../../domain/enums/user-types";
 import ConflictError from "../../infrastructure/rest-api/middlewares/errors/conflict-error";
 import UnprocessableEntityError from "../../infrastructure/rest-api/middlewares/errors/unprocessable-entity-error";
+import UsersFinder from "./users-finder";
+
+interface ConstructorParams {
+  persistedUserCreator: PersistedUserCreator;
+  usersFinder: UsersFinder;
+}
 
 export default class UserCreator {
   private readonly persistedUserCreator: PersistedUserCreator;
-  private readonly persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress;
+  private readonly usersFinder: UsersFinder;
 
-  constructor(params: {
-    persistedUserCreator: PersistedUserCreator,
-    persistedUserFinderByEmailAddress: PersistedUserFinderByEmailAddress
-  }) {
-    if(!params.persistedUserCreator)
-      throw new Error('persistedUserCreator must be defined')
-
-    if(!params.persistedUserFinderByEmailAddress)
-      throw new Error('persistedUserFinderByEmailAddress must be defined')
+  constructor(params: ConstructorParams) {
+    this.checkForUndefinedConstructorParams(params);
 
     this.persistedUserCreator = params.persistedUserCreator;
-
-    this.persistedUserFinderByEmailAddress =
-      params.persistedUserFinderByEmailAddress;
+    this.usersFinder = params.usersFinder;
   }
 
   public async createUser(params: {
@@ -34,10 +30,7 @@ export default class UserCreator {
     type: string
   }): Promise<User> {
     const foundUserWithSameEmailAddress =
-      await this.persistedUserFinderByEmailAddress
-        .findPersistedUserByEmailAddress(
-          params.emailAddress
-        );
+      await this.usersFinder.findUserByEmailAddress(params.emailAddress);
 
     if (foundUserWithSameEmailAddress) {
       throw new ConflictError(
@@ -66,5 +59,15 @@ export default class UserCreator {
       })
 
     return createdUser;
+  }
+
+  private checkForUndefinedConstructorParams(
+    params: ConstructorParams
+  ): void {
+    if(!params.persistedUserCreator)
+      throw new Error('persistedUserCreator must be defined');
+
+    if(!params.usersFinder)
+      throw new Error('usersFinder must be defined');
   }
 }
