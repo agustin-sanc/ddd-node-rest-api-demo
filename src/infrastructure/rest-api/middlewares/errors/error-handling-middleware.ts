@@ -6,6 +6,7 @@ import ClientError from "./client-error";
 import UnprocessableEntityError from "./unprocessable-entity-error";
 import NotFoundError from "./not-found-error";
 import ForbiddenError from "./forbidden-error";
+import InvalidCredentialsError from "./invalid-credentials-error";
 
 export default function errorHandlingMiddleware(
   error: Error,
@@ -33,6 +34,16 @@ export default function errorHandlingMiddleware(
       .status(401)
       .send({
         error: 'Unauthorized'
+      });
+
+    return;
+  }
+
+  if (error instanceof InvalidCredentialsError) {
+    response
+      .status(401)
+      .send({
+        error: error.message
       });
 
     return;
