@@ -29,33 +29,21 @@ export default class UserUpdater {
   public async updateUser(
     params: UpdateUserParams
   ): Promise<void> {
-    this.checkForUndefinedUpdateUserParams(params);
     const {id, emailAddress, password} = params;
+
+    await this.usersFinder
+      .checkIfEmailAddressIsAvailableForUpdateUser({
+        id,
+        emailAddress,
+      });
 
     const user = await this.usersFinder.findUserById(id);
 
-    const foundUserWithSameEmailAddress =
-      await this.usersFinder
-        .findUserByEmailAddress(emailAddress)
-        .catch(error => {
-          console.error(error);
+    if (emailAddress)
+      user.changeEmailAddressTo(emailAddress);
 
-          if(error.message.includes('Not found'))
-            return undefined;
-
-          throw error;
-        })
-
-    if (foundUserWithSameEmailAddress
-      && !(foundUserWithSameEmailAddress.hasId(id))
-    ) {
-      throw new Error(
-        `Conflict. Email address is already taken.`
-      );
-    }
-
-    user.changeEmailAddressTo(emailAddress);
-    user.changePasswordTo(password);
+    if (password)
+      user.changePasswordTo(password);
 
     await this.persistedUserUpdater
       .updatePersistedUser(user)
@@ -76,18 +64,5 @@ export default class UserUpdater {
 
     if (!params.usersFinder)
       throw new Error('usersFinder must be defined.');
-  }
-
-  private checkForUndefinedUpdateUserParams(
-    params: UpdateUserParams
-  ): void {
-    if (!params.id)
-      throw new Error('id must be defined.');
-
-    if (!params.emailAddress)
-      throw new Error('emailAddress must be defined.');
-
-    if (!params.password)
-      throw new Error('password must be defined.');
   }
 }

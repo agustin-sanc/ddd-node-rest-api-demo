@@ -4,6 +4,9 @@ import Password from "../../../../../domain/value-objects/password";
 import ID from "../../../../../domain/value-objects/id";
 import buildUserUpdaterApplicationService from "../../../../builders/build-user-updater-application-service";
 import ClientError from "../../../middlewares/errors/client-error";
+import User from "../../../../../domain/entities/user";
+import {UserTypes} from "../../../../../domain/enums/user-types";
+import ForbiddenError from "../../../middlewares/errors/forbidden-error";
 
 interface RequestBody {
   id: ID,
@@ -18,10 +21,37 @@ export default async function updateUserController(
 ): Promise<void> {
   try {
     const requestBody: RequestBody = getValidatedRequestBody(request);
+    const requestUser: User = request.user;
+    let userToUpdateId: ID;
+
+    if (!requestBody.id) {
+      userToUpdateId = requestUser.getId();
+    }
+
+    if (
+      requestUser.hasType(UserTypes.ADMIN_USER)
+      && requestBody.id
+    ) {
+      userToUpdateId = requestBody.id;
+    }
+
+    if (
+      requestUser.hasType(UserTypes.END_USER)
+      && requestBody.id
+      && !(requestUser.hasId(requestBody.id))
+    ) {
+      next(new ForbiddenError());
+
+      return;
+    }
 
     const userUpdater = buildUserUpdaterApplicationService();
 
-    await userUpdater.updateUser(requestBody);
+    await userUpdater.updateUser({
+      id: userToUpdateId,
+      emailAddress: requestBody.emailAddress,
+      password: requestBody.password
+    });
   } catch (error) {
     next(error);
 
@@ -44,20 +74,32 @@ function getValidatedRequestBody(
   let emailAddress: EmailAddress;
   let password: Password;
 
-  try {
-    id = new ID(
-      request.body.id
-    );
+  if (request.body.id) {
+    try {
+      id = new ID(request.body.id);
+    } catch (error) {
+      throw new ClientError(error.message);
+    }
+  }
 
-    emailAddress = new EmailAddress(
-      request.body.emailAddress
-    );
+  if (request.body.emailAddress) {
+    try {
+      emailAddress = new EmailAddress(
+        request.body.emailAddress
+      );
+    } catch (error) {
+      throw new ClientError(error.message);
+    }
+  }
 
-    password = new Password(
-      request.body.password
-    );
-  } catch (error) {
-    throw new ClientError(error.message);
+  if (request.body.password) {
+    try {
+      password = new Password(
+        request.body.password
+      );
+    } catch (error) {
+      throw new ClientError(error.message);
+    }
   }
 
   return {
