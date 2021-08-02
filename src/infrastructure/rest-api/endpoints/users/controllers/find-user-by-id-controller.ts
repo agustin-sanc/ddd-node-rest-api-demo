@@ -3,7 +3,8 @@ import User from "../../../../../domain/entities/user";
 import getRawUserObject from "../../../../../domain/mappers/get-raw-user-object";
 import ID from "../../../../../domain/value-objects/id";
 import buildUsersFinderApplicationService from "../../../../builders/build-users-finder-application-service";
-import ClientError from "../../../middlewares/errors/client-error";
+import {UserTypes} from "../../../../../domain/enums/user-types";
+import ForbiddenError from "../../../middlewares/errors/forbidden-error";
 
 interface RequestParams {
   id: ID;
@@ -17,10 +18,30 @@ export default async function findUserByIdController(
   let user: User;
 
   try {
+    const requestUser: User = request.user;
+    console.log(requestUser);
     const requestParams = getValidatedRequestParams(request);
+    let requestedUserId: ID;
+
+    if (
+      requestUser.hasType(UserTypes.ADMIN_USER)
+      && requestParams.id
+    ) {
+      requestedUserId = requestParams.id;
+    } else if (
+      requestUser.hasType(UserTypes.END_USER)
+      && requestParams.id
+      && !(requestUser.hasId(requestParams.id))
+    ) {
+      next(new ForbiddenError());
+
+      return;
+    } else {
+      requestedUserId = requestUser.getId();
+    }
 
     const usersFinder = buildUsersFinderApplicationService();
-    user = await usersFinder.findUserById(requestParams.id);
+    user = await usersFinder.findUserById(requestedUserId);
   } catch (error) {
     next(error);
 
@@ -42,11 +63,8 @@ function getValidatedRequestParams(
 ): RequestParams {
   let id: ID;
 
-  try {
+  if (request.query.id)
     id = new ID(request.query.id);
-  } catch (error) {
-    throw new ClientError(error.message);
-  }
 
   return {
     id
