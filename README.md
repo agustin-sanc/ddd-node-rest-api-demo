@@ -1,4 +1,4 @@
-# DDD (Domain-Driven Design) with Node.js - REST API Demonstration
+# DDD (Domain-Driven Design) with Node.js - REST API Demonstration with TypeScript, Express.js and MongoDB
 
 - Author: Agustín Sánchez
 
