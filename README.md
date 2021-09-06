@@ -1,4 +1,4 @@
-# Node.js REST API Demo
+# DDD (Domain-Driven Design) with Node.js - REST API Demonstration
 
 - Author: Agustín Sánchez
 
